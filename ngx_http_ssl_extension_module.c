@@ -36,30 +36,21 @@ ngx_http_ssl_extension_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
 
     ngx_conf_merge_value(conf->ssl_allow_proxy, prev->ssl_allow_proxy, 0);
 
-    return NGX_OK;
+    if (conf->ssl_allow_proxy) {
+        ngx_http_ssl_extension_allow_proxy();
+    }
+    return NGX_CONF_OK;
 }
 
 
 static char *
-ngx_http_ssl_extension_allow_proxy(ngx_conf_t *cf, void *post, void *data)
+ngx_http_ssl_extension_allow_proxy()
 {
-    ngx_http_ssl_srv_conf_t  *sscf;
-
-    ngx_flag_t  *fp = data;
-    if (*fp == 0) {
-        return NGX_CONF_OK;
-    }
-
     sscf = ngx_http_conf_get_module_srv_conf(cf, ngx_http_ssl_module);
 
     if (sscf->ssl.ctx != NULL) {
-        X509_STORE* store = SSL_CTX_get_cert_store(sscf->ssl.ctx);
-        if (store == NULL) {
-            ngx_log_error(NGX_LOG_ALERT, cf->log, 0, "SSL_CTX_get_cert_store() failed");
-            return NGX_CONF_ERROR;
-        }
         X509_STORE_CTX_set_flags(sscf->ssl.ctx, X509_V_FLAG_ALLOW_PROXY_CERTS);
-	ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "Foo Module is enabled");
+	ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "ssl_allow_proxy is enabled");
     }
 
     return NGX_CONF_OK;
@@ -76,7 +67,7 @@ static ngx_command_t  ngx_http_ssl_extension_commands[] = {
       ngx_conf_set_flag_slot,
       0,
       offsetof(ngx_http_ssl_extension_srv_conf_t, ssl_allow_proxy),
-      &ngx_http_ssl_extension_allow_proxy_post },
+      NULL },
 
       ngx_null_command
 };
