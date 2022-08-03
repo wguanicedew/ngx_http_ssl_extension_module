@@ -29,6 +29,20 @@ ngx_http_ssl_extension_create_srv_conf(ngx_conf_t *cf)
 
 
 static char *
+ngx_http_ssl_extension_allow_proxy()
+{
+    sscf = ngx_http_conf_get_module_srv_conf(cf, ngx_http_ssl_module);
+
+    if (sscf->ssl.ctx != NULL) {
+        X509_STORE_CTX_set_flags(sscf->ssl.ctx, X509_V_FLAG_ALLOW_PROXY_CERTS);
+        ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "ssl_allow_proxy is enabled");
+    }
+
+    return NGX_CONF_OK;
+}
+
+
+static char *
 ngx_http_ssl_extension_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
 {
     ngx_http_ssl_extension_srv_conf_t *prev = parent;
@@ -43,21 +57,8 @@ ngx_http_ssl_extension_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
 }
 
 
-static char *
-ngx_http_ssl_extension_allow_proxy()
-{
-    sscf = ngx_http_conf_get_module_srv_conf(cf, ngx_http_ssl_module);
 
-    if (sscf->ssl.ctx != NULL) {
-        X509_STORE_CTX_set_flags(sscf->ssl.ctx, X509_V_FLAG_ALLOW_PROXY_CERTS);
-	ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "ssl_allow_proxy is enabled");
-    }
-
-    return NGX_CONF_OK;
-}
-
-
-static ngx_conf_post_t  ngx_http_ssl_extension_allow_proxy_post = { ngx_http_ssl_extension_allow_proxy };
+//static ngx_conf_post_t  ngx_http_ssl_extension_allow_proxy_post = { ngx_http_ssl_extension_allow_proxy };
 
 
 static ngx_command_t  ngx_http_ssl_extension_commands[] = {
