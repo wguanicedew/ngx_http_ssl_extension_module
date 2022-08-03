@@ -34,7 +34,7 @@ ngx_http_ssl_extension_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_http_ssl_extension_srv_conf_t *prev = parent;
     ngx_http_ssl_extension_srv_conf_t *conf = child;
 
-    ngx_conf_merge_uint_value(conf->ssl_allow_proxy, prev->ssl_allow_proxy, 0);
+    ngx_conf_merge_value(conf->ssl_allow_proxy, prev->ssl_allow_proxy, 0);
 
     return NGX_OK;
 }
