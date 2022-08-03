@@ -9,7 +9,7 @@
 
 
 typedef struct {
-    ngx_uint_t  ssl_allow_proxy;
+    ngx_flag_t  ssl_allow_proxy;
 } ngx_http_ssl_extension_srv_conf_t;
 
 
