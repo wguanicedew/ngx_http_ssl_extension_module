@@ -31,6 +31,8 @@ ngx_http_ssl_extension_create_srv_conf(ngx_conf_t *cf)
 static char *
 ngx_http_ssl_extension_allow_proxy()
 {
+    ngx_http_ssl_srv_conf_t   *sscf;
+
     sscf = ngx_http_conf_get_module_srv_conf(cf, ngx_http_ssl_module);
 
     if (sscf->ssl.ctx != NULL) {
