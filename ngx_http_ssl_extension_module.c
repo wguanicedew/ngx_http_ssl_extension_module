@@ -29,7 +29,7 @@ ngx_http_ssl_extension_create_srv_conf(ngx_conf_t *cf)
 
 
 static char *
-ngx_http_ssl_extension_allow_proxy()
+ngx_http_ssl_extension_allow_proxy(ngx_conf_t *cf)
 {
     ngx_http_ssl_srv_conf_t   *sscf;
 
@@ -53,7 +53,7 @@ ngx_http_ssl_extension_merge_srv_conf(ngx_conf_t *cf, void *parent, void *child)
     ngx_conf_merge_value(conf->ssl_allow_proxy, prev->ssl_allow_proxy, 0);
 
     if (conf->ssl_allow_proxy) {
-        ngx_http_ssl_extension_allow_proxy();
+        ngx_http_ssl_extension_allow_proxy(cf);
     }
     return NGX_CONF_OK;
 }
