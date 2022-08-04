@@ -41,7 +41,8 @@ ngx_http_ssl_extension_allow_proxy(ngx_conf_t *cf)
             ngx_log_error(NGX_LOG_ALERT, cf->log, 0, "SSL_CTX_get_cert_store() failed");
             return NGX_CONF_ERROR;
         }
-        X509_STORE_CTX_set_flags(store, X509_V_FLAG_ALLOW_PROXY_CERTS);
+        // X509_STORE_CTX_set_flags(store, X509_V_FLAG_ALLOW_PROXY_CERTS);
+	X509_STORE_set_flags(store, X509_V_FLAG_ALLOW_PROXY_CERTS);
         ngx_log_error(NGX_LOG_NOTICE, cf->log, 0, "ssl_allow_proxy is enabled");
     }
 
